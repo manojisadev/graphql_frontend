@@ -7,14 +7,26 @@ import {ApolloProvider} from 'react-apollo';
 import {ApolloClient} from 'apollo-client';
 import {createHttpLink} from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { resolvers, typeDefs } from "./resolvers";
+
 
 const link = createHttpLink({
     uri: 'http://localhost:3000/graphql'
 })
 
+const cache = new InMemoryCache();
+
 const client = new ApolloClient({
     link: link,
-    cache: new InMemoryCache()
+    cache: cache,
+    typeDefs,
+    resolvers
+});
+
+cache.writeData({
+    data: {
+        isShowCreateTodo: false
+    }
 })
 
 ReactDOM.render(
