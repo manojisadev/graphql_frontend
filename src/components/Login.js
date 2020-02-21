@@ -23,8 +23,9 @@ const Login = () => {
     let password;
     
     const [logIn, {loading,error,data}] = useMutation(LOG_IN, {        
-        update(cache, { data: {loginData}}) {
-            localStorage.setItem("token", loginData.token)
+        update(cache, { data }) {
+            console.log(data.login.token)
+            localStorage.setItem("token", data.login.token)
         }
     });
     if (loading) return 'Loading..';
