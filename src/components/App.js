@@ -3,7 +3,7 @@ import Login from './Login';
 import Logout from './Logout';
 import Hello from './Hello'
 
-import Todo from './Todo';
+import Todo from './Todo.tsx';
 
 
 function App() {

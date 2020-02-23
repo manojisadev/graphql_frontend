@@ -8,12 +8,15 @@ import AddIcon from '@material-ui/icons/Add';
 import CreateTodo from './CreateTodo';
 import { useApolloClient } from "@apollo/react-hooks";
 import DeleteIcon from '@material-ui/icons/Delete';
+import {GetTodos, GetTodos_todos} from './types/GetTodos'
+import {deleteTodo_deleteTodo, deleteTodo, deleteTodoVariables} from './types/deleteTodo'
+
 
 
 import gql from 'graphql-tag';
 
 const GET_TODOS = gql`
-{
+query GetTodos{
   
   todos {
     id
@@ -32,19 +35,19 @@ const DELETE_TODO = gql`
 `;
 
 const IS_SHOW_CREATE = gql `
-{
+query IsShowCreate{
   isShowCreateTodo @client  
 }
 `;
 
-function Todo() {
+const Todo: React.FC = () => {
   const client = useApolloClient();
 
-  const {loading, error, data} = useQuery(GET_TODOS)
+  const {loading, error, data} = useQuery<GetTodos>(GET_TODOS)
 
   const {loading: showCreateLoader, error: showCreateError, data: showCreateData} = useQuery(IS_SHOW_CREATE)
 
-  const [deleteTodo] = useMutation(DELETE_TODO
+  const [deleteTodo] = useMutation<deleteTodo_deleteTodo, deleteTodoVariables>(DELETE_TODO
     // , {
     // update(cache, {data: {deletedTodo}}){
     //   const {todos} = cache.readQuery({query: GET_TODOS});
@@ -56,14 +59,15 @@ function Todo() {
     // }
   )
 
-  if (loading) return 'Loading..';
-  if (error) return `Error ${error.message}`;
+  if (loading) return <div>'Loading..'</div>;
+  if (error) return <div>`Error ${error.message}`</div>;
 
   return (
+    
     <Paper style={{ margin:"5em"}}>
       <Grid container direction="column" justify="center" alignItems="center" spacing={2} style={{padding:"1em"}}>
         {
-          data.todos.map(todo => (
+          data && data.todos.map((todo:GetTodos_todos) => (
             <Grid item key={todo.id}>  
               <Card style={{height: "5em", width: "10em", display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#ffe57f", boxShadow: '0px 0px 0px 0px '}} >
                 <CardContent>

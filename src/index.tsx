@@ -6,7 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import {ApolloProvider} from 'react-apollo';
 import {ApolloClient} from 'apollo-client';
 import {createHttpLink} from 'apollo-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { resolvers, typeDefs } from "./resolvers";
 import { setContext } from 'apollo-link-context';
 
@@ -30,11 +30,10 @@ const authLink = setContext((_, { headers }) => {
 
 const cache = new InMemoryCache();
 
-const client = new ApolloClient({
+const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
     link: authLink.concat(httpLink),
     cache: cache,
     typeDefs,
-    resolvers
 });
 
 cache.writeData({
